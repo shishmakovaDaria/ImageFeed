@@ -1,24 +1,156 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--ImageList-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="uT9-bx-aLt">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <color key="backgroundColor" name="YP Black"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="187" id="fJd-L6-9uI" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="187"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fJd-L6-9uI" id="rpV-rl-SLt">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="187"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="BM0-XD-hSZ" userLabel="Cell Image">
+                                                    <rect key="frame" x="16" y="4" width="361" height="179"/>
+                                                    <color key="tintColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeX-xj-uaP" userLabel="Like Button">
+                                                    <rect key="frame" x="323.66666666666669" y="4" width="53.333333333333314" height="40"/>
+                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal">
+                                                        <imageReference key="image" image="Like Active" symbolScale="large" renderingMode="hierarchical-single">
+                                                            <hierarchicalColors>
+                                                                <color systemColor="labelColor"/>
+                                                                <color systemColor="secondaryLabelColor"/>
+                                                                <color systemColor="tertiaryLabelColor"/>
+                                                            </hierarchicalColors>
+                                                        </imageReference>
+                                                    </state>
+                                                    <buttonConfiguration key="configuration" style="plain">
+                                                        <imageReference key="image" image="Like Active" symbolScale="large" renderingMode="hierarchical-single">
+                                                            <hierarchicalColors>
+                                                                <color systemColor="labelColor"/>
+                                                                <color systemColor="secondaryLabelColor"/>
+                                                                <color systemColor="tertiaryLabelColor"/>
+                                                            </hierarchicalColors>
+                                                        </imageReference>
+                                                    </buttonConfiguration>
+                                                </button>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="urE-1Z-kN6" userLabel="Gradient View">
+                                                    <rect key="frame" x="16" y="153" width="361" height="30"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11 января 2023" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pty-Xg-12l" userLabel="Date Label">
+                                                            <rect key="frame" x="8" y="6.3333333333333419" width="94.666666666666671" height="15.666666666666664"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                            <color key="textColor" name="YP White"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="H3g-aj-ggN"/>
+                                                        <constraint firstAttribute="bottom" secondItem="pty-Xg-12l" secondAttribute="bottom" constant="8" id="H8I-2M-GDg"/>
+                                                        <constraint firstItem="pty-Xg-12l" firstAttribute="leading" secondItem="urE-1Z-kN6" secondAttribute="leading" constant="8" id="Kni-7Q-9qo"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                            </subviews>
+                                            <color key="backgroundColor" name="YP Black"/>
+                                            <constraints>
+                                                <constraint firstItem="BM0-XD-hSZ" firstAttribute="leading" secondItem="rpV-rl-SLt" secondAttribute="leading" constant="16" id="Fan-9C-72Z"/>
+                                                <constraint firstAttribute="bottom" secondItem="BM0-XD-hSZ" secondAttribute="bottom" constant="4" id="Ftm-Io-i0v"/>
+                                                <constraint firstItem="urE-1Z-kN6" firstAttribute="trailing" secondItem="BM0-XD-hSZ" secondAttribute="trailing" id="H1t-N3-pVY"/>
+                                                <constraint firstItem="pty-Xg-12l" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="BM0-XD-hSZ" secondAttribute="trailing" id="KNa-MR-2IM"/>
+                                                <constraint firstItem="urE-1Z-kN6" firstAttribute="leading" secondItem="BM0-XD-hSZ" secondAttribute="leading" id="PfB-Rc-JOn"/>
+                                                <constraint firstAttribute="trailing" secondItem="BM0-XD-hSZ" secondAttribute="trailing" constant="16" id="Ryo-79-OS3"/>
+                                                <constraint firstItem="OeX-xj-uaP" firstAttribute="trailing" secondItem="BM0-XD-hSZ" secondAttribute="trailing" id="l09-lL-0ic"/>
+                                                <constraint firstItem="OeX-xj-uaP" firstAttribute="top" secondItem="BM0-XD-hSZ" secondAttribute="top" id="nx1-As-kVU"/>
+                                                <constraint firstItem="urE-1Z-kN6" firstAttribute="bottom" secondItem="BM0-XD-hSZ" secondAttribute="bottom" id="tm4-Vd-iA6"/>
+                                                <constraint firstItem="BM0-XD-hSZ" firstAttribute="top" secondItem="rpV-rl-SLt" secondAttribute="top" constant="4" id="zgt-LI-BL2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" name="YP Black"/>
+                                        <color key="tintColor" name="YP Black"/>
+                                        <connections>
+                                            <outlet property="cellImage" destination="BM0-XD-hSZ" id="WLp-WI-aUK"/>
+                                            <outlet property="dateLabel" destination="pty-Xg-12l" id="XOc-73-fwP"/>
+                                            <outlet property="gradientView" destination="urE-1Z-kN6" id="6Me-B0-Fw0"/>
+                                            <outlet property="likeButton" destination="OeX-xj-uaP" id="Gpm-dk-Tul"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="4y5-v4-EBU"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Tgu-Ku-1X4"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" name="YP Black"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="uT9-bx-aLt" secondAttribute="trailing" id="2BA-vl-4YH"/>
+                            <constraint firstItem="uT9-bx-aLt" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="K80-ZA-mH3"/>
+                            <constraint firstAttribute="bottom" secondItem="uT9-bx-aLt" secondAttribute="bottom" id="fdL-gN-eMG"/>
+                            <constraint firstItem="uT9-bx-aLt" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="vie-jm-07K"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="uT9-bx-aLt" id="Qum-Ja-Ju5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-52.671755725190835" y="-493.66197183098592"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="0" width="200" height="132"/>
+        <image name="Like Active" width="29.333333969116211" height="26"/>
+        <namedColor name="YP Black">
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP White">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
