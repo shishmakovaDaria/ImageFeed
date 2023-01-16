@@ -20,6 +20,7 @@ final class ImagesListCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         self.makeGradient()
     }
 }
