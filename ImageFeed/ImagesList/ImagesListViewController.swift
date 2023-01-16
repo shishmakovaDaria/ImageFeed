@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  ImageFeed
-//
-//  Created by Дарья Шишмакова on 22.12.2022.
-//
-
 import UIKit
 
 extension ImagesListViewController: UITableViewDelegate {
@@ -36,7 +29,6 @@ extension ImagesListViewController: UITableViewDataSource {
         
         configCell(for: imagesListCell, with: indexPath)
         return imagesListCell
-        
     }
 }
 
@@ -55,7 +47,6 @@ class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
     
@@ -71,13 +62,6 @@ class ImagesListViewController: UIViewController {
         } else {
             cell.likeButton.imageView?.image = UIImage(named: "Like Active")
         }
-        
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.ypBlack.withAlphaComponent(0.0).cgColor, UIColor.ypBlack.withAlphaComponent(0.2).cgColor]
-        gradient.locations = [0,1]
-        gradient.frame = cell.gradientView.bounds
-        
-        cell.gradientView.layer.insertSublayer(gradient, at: 0)
     }
 }
 
