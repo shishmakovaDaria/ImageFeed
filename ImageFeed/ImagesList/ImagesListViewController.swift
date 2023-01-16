@@ -29,7 +29,6 @@ extension ImagesListViewController: UITableViewDataSource {
         
         configCell(for: imagesListCell, with: indexPath)
         return imagesListCell
-        
     }
 }
 
@@ -64,13 +63,6 @@ class ImagesListViewController: UIViewController {
         } else {
             cell.likeButton.imageView?.image = UIImage(named: "Like Active")
         }
-        
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.ypBlack.withAlphaComponent(0.0).cgColor, UIColor.ypBlack.withAlphaComponent(0.2).cgColor]
-        gradient.locations = [0,1]
-        gradient.frame = cell.gradientView.bounds
-        
-        cell.gradientView.layer.insertSublayer(gradient, at: 0)
     }
 }
 
