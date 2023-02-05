@@ -10,21 +10,18 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
-    @IBOutlet var imageView: UIImageView!
-    
+    @IBOutlet private var imageView: UIImageView!
     
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func didTapShareButton(_ sender: Any) {
-        
+    @IBAction private func didTapShareButton(_ sender: Any) {
         let share = UIActivityViewController(activityItems: [image!], applicationActivities: nil)
         self.present(share, animated: true, completion: nil)
     }
     
-    
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet private weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
