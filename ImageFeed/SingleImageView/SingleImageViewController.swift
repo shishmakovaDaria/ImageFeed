@@ -10,6 +10,10 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
     @IBOutlet private var imageView: UIImageView!
     
     @IBAction private func didTapBackButton() {

@@ -4,6 +4,10 @@ import UIKit
 class ProfileViewController: UIViewController {
     let profilePhoto = UIImageView()
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
