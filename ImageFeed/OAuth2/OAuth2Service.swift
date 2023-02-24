@@ -1,28 +1,35 @@
 import Foundation
 
-class OAuth2Service {
+final class OAuth2Service {
     
     static let shared = OAuth2Service()
     
+    private let oAuth2TokenStorage = OAuth2TokenStorage()
+    
     private (set) var authToken: String? {
         get {
-            return OAuth2TokenStorage().token
+            return oAuth2TokenStorage.token
         }
         set {
-            OAuth2TokenStorage().token = newValue
+            oAuth2TokenStorage.token = newValue
         }
     }
     
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
-            path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
+            path: {
+                guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else { return "" }
+                urlComponents.queryItems = [
+                    URLQueryItem(name: "client_id", value: Constants.AccessKey),
+                    URLQueryItem(name: "client_secret", value: Constants.SecretKey),
+                    URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+                    URLQueryItem(name: "code", value: code),
+                    URLQueryItem(name: "grant_type", value: "authorization_code")
+                ]
+                guard let url = urlComponents.url else { return "" }
+                return url.absoluteString
+            }(),
+            httpMethod: "POST"
         )
     }
     
@@ -50,7 +57,7 @@ class OAuth2Service {
         completion: @escaping (Result<String, Error>) -> Void
     ) {
         let request = authTokenRequest(code: code)
-        let task = object(for: request) { [weak self] result in
+        _ = object(for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let body):
@@ -61,6 +68,5 @@ class OAuth2Service {
                 completion(.failure(error))
             }
         }
-        task.resume()
     }
 }
