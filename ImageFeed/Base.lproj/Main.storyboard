@@ -378,10 +378,10 @@
             </objects>
             <point key="canvasLocation" x="-1295" y="-1072"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Custom Navigation Controller-->
         <scene sceneID="tI6-rf-Lub">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MpV-rd-TT8" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MpV-rd-TT8" customClass="CustomNavigationController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="K92-4N-bfS"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Kqq-O3-y4R">

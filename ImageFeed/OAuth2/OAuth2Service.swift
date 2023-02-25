@@ -15,22 +15,19 @@ final class OAuth2Service {
         }
     }
     
-    private func authTokenRequest(code: String) -> URLRequest {
-        URLRequest.makeHTTPRequest(
-            path: {
-                guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else { return "" }
-                urlComponents.queryItems = [
-                    URLQueryItem(name: "client_id", value: Constants.AccessKey),
-                    URLQueryItem(name: "client_secret", value: Constants.SecretKey),
-                    URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
-                    URLQueryItem(name: "code", value: code),
-                    URLQueryItem(name: "grant_type", value: "authorization_code")
-                ]
-                guard let url = urlComponents.url else { return "" }
-                return url.absoluteString
-            }(),
-            httpMethod: "POST"
-        )
+    private func authTokenRequest(code: String) -> URLRequest? {
+        var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "client_id", value: Constants.AccessKey),
+            URLQueryItem(name: "client_secret", value: Constants.SecretKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+            URLQueryItem(name: "code", value: code),
+            URLQueryItem(name: "grant_type", value: "authorization_code")
+        ]
+        guard let url = urlComponents?.url else { return nil}
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        return request
     }
     
     private func object(
@@ -57,15 +54,17 @@ final class OAuth2Service {
         completion: @escaping (Result<String, Error>) -> Void
     ) {
         let request = authTokenRequest(code: code)
-        _ = object(for: request) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let body):
-                let authToken = body.accessToken
-                self.authToken = authToken
-                completion(.success(authToken))
-            case .failure(let error):
-                completion(.failure(error))
+        if let request = request {
+            _ = object(for: request) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let body):
+                    let authToken = body.accessToken
+                    self.authToken = authToken
+                    completion(.success(authToken))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
     }
