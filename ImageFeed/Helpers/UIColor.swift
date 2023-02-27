@@ -1,10 +1,3 @@
-//
-//  UIColor.swift
-//  ImageFeed
-//
-//  Created by Дарья Шишмакова on 12.01.2023.
-//
-
 import Foundation
 import UIKit
 
