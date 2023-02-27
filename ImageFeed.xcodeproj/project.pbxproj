@@ -85,14 +85,6 @@
 			path = OAuth2;
 			sourceTree = "<group>";
 		};
-		612E425C29A2C1E20036F2F2 /* SingleImageView */ = {
-			isa = PBXGroup;
-			children = (
-				6182C737297DA66B004E679F /* SingleImageViewController.swift */,
-			);
-			path = SingleImageView;
-			sourceTree = "<group>";
-		};
 		6132673A2954CB9400CEC80B = {
 			isa = PBXGroup;
 			children = (
@@ -116,7 +108,6 @@
 				616ED6C629957C6000D1D43E /* Auth */,
 				612E425B29A2C1860036F2F2 /* OAuth2 */,
 				61C989AA296F2A2D007EF66F /* ImagesList */,
-				612E425C29A2C1E20036F2F2 /* SingleImageView */,
 				6145D2772979CEDA00784144 /* Profile */,
 				612115AA2970A6FA006DD4B3 /* Helpers */,
 				61A6CA5B299023F600EE017C /* Constants.swift */,
@@ -151,6 +142,7 @@
 		61C989AA296F2A2D007EF66F /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
+				6182C737297DA66B004E679F /* SingleImageViewController.swift */,
 				6132674A2954CB9400CEC80B /* ImagesListViewController.swift */,
 				61C989A8296F29F2007EF66F /* ImagesListCell.swift */,
 			);

@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 
 final class SingleImageViewController: UIViewController {
-    var image: UIImage! {
+    var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
             imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
+            rescaleAndCenterImageInScrollView(image: image ?? UIImage())
         }
     }
     
@@ -19,10 +19,10 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.minimumZoomScale = 0.1
+        scrollView.minimumZoomScale = min(scrollView.bounds.size.width / imageView.frame.size.width, scrollView.bounds.size.height / imageView.frame.size.height)
         scrollView.maximumZoomScale = 8
         imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
+        rescaleAndCenterImageInScrollView(image: image ?? UIImage())
     }
     
     private func rescaleAndCenterImageInScrollView (image: UIImage) {
@@ -44,6 +44,17 @@ final class SingleImageViewController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
     
+    private func recenterImage() {
+        let scrollViewSize = scrollView.bounds.size
+        let imageViewSize = imageView.frame.size
+        
+        let hScale = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2.0 : 0
+        let vScale = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2.0 : 0
+        
+        scrollView.contentInset = UIEdgeInsets(top: vScale, left: hScale, bottom: vScale, right: hScale)
+        scrollView.layoutIfNeeded()
+    }
+    
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
@@ -57,5 +68,9 @@ final class SingleImageViewController: UIViewController {
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        recenterImage()
     }
 }

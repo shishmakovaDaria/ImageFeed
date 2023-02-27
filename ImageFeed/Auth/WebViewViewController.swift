@@ -30,20 +30,11 @@ final class WebViewViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else { return }
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.AccessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.AccessScope)
-        ]
-        guard let url = urlComponents.url else { return }
-        
-        let request = URLRequest(url: url)
-        webView.load(request)
+        if let request = authorizeRequest() {
+            webView.load(request)
+        }
         
         webView.navigationDelegate = self
-        
         updateProgress()
     }
     
@@ -77,6 +68,18 @@ final class WebViewViewController: UIViewController {
         else { return nil }
         
         return codeItems.value
+    }
+    
+    private func authorizeRequest() -> URLRequest? {
+        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "client_id", value: Constants.AccessKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "scope", value: Constants.AccessScope)
+        ]
+        guard let url = urlComponents?.url else { return nil}
+        return URLRequest(url: url)
     }
     
     private func updateProgress() {
