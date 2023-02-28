@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     
@@ -41,12 +42,16 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     
     //MARK: - AuthViewControllerDelegate
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        ProgressHUD.animationType = .circleRotateChase
+        ProgressHUD.show()
         oAuth2Service.fetchAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
                 self.switchToTabBarController()
+                ProgressHUD.dismiss()
             case .failure:
+                ProgressHUD.dismiss()
                 break
             }
         }
