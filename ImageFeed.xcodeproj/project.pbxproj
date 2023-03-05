@@ -23,6 +23,7 @@
 		616ED6C52995759600D1D43E /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616ED6C42995759600D1D43E /* AuthViewController.swift */; };
 		616ED6C829957D3A00D1D43E /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616ED6C729957D3A00D1D43E /* WebViewViewController.swift */; };
 		6182C738297DA66B004E679F /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6182C737297DA66B004E679F /* SingleImageViewController.swift */; };
+		619BABAC29B519BE009400B1 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619BABAB29B519BE009400B1 /* UIBlockingProgressHUD.swift */; };
 		61A6CA5C299023F600EE017C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A6CA5B299023F600EE017C /* Constants.swift */; };
 		61BED02D29AE771000FC4674 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 61BED02C29AE771000FC4674 /* ProgressHUD */; };
 		61C3C02429A92ADA005BCE1E /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C3C02329A92ADA005BCE1E /* CustomNavigationController.swift */; };
@@ -49,6 +50,7 @@
 		616ED6C42995759600D1D43E /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		616ED6C729957D3A00D1D43E /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		6182C737297DA66B004E679F /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		619BABAB29B519BE009400B1 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		61A6CA5B299023F600EE017C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		61C3C02329A92ADA005BCE1E /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		61C989A8296F29F2007EF66F /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		612115AA2970A6FA006DD4B3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				61A6CA5B299023F600EE017C /* Constants.swift */,
 				612115A82970A6ED006DD4B3 /* UIColor.swift */,
 			);
 			path = Helpers;
@@ -112,7 +115,6 @@
 				61C989AA296F2A2D007EF66F /* ImagesList */,
 				6145D2772979CEDA00784144 /* Profile */,
 				612115AA2970A6FA006DD4B3 /* Helpers */,
-				61A6CA5B299023F600EE017C /* Constants.swift */,
 				61C3C02329A92ADA005BCE1E /* CustomNavigationController.swift */,
 				613267462954CB9400CEC80B /* AppDelegate.swift */,
 				613267482954CB9400CEC80B /* SceneDelegate.swift */,
@@ -155,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				61F2766529A3D17100E662F8 /* SplashViewController.swift */,
+				619BABAB29B519BE009400B1 /* UIBlockingProgressHUD.swift */,
 			);
 			path = SplashView;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				616ED6C52995759600D1D43E /* AuthViewController.swift in Sources */,
 				61C3C02429A92ADA005BCE1E /* CustomNavigationController.swift in Sources */,
 				61A6CA5C299023F600EE017C /* Constants.swift in Sources */,
+				619BABAC29B519BE009400B1 /* UIBlockingProgressHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
