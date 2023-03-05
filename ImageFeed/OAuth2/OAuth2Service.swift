@@ -15,6 +15,9 @@ final class OAuth2Service {
         }
     }
     
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
     private func authTokenRequest(code: String) -> URLRequest? {
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")
         urlComponents?.queryItems = [
@@ -53,19 +56,29 @@ final class OAuth2Service {
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
+        assert(Thread.isMainThread)
+        if lastCode == code { return }
+        task?.cancel()
+        lastCode = code
         let request = authTokenRequest(code: code)
         if let request = request {
-            _ = object(for: request) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let body):
-                    let authToken = body.accessToken
-                    self.authToken = authToken
-                    completion(.success(authToken))
-                case .failure(let error):
-                    completion(.failure(error))
+            let task = object(for: request) { [weak self] result in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let body):
+                        let authToken = body.accessToken
+                        self.authToken = authToken
+                        completion(.success(authToken))
+                        self.task = nil
+                    case .failure(let error):
+                        completion(.failure(error))
+                        self.lastCode = nil
+                    }
                 }
             }
+            self.task = task
+            task.resume()
         }
     }
 }
