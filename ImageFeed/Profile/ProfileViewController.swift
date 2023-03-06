@@ -3,6 +3,12 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     let profilePhoto = UIImageView()
+    let profileService = ProfileService()
+    let authToken = OAuth2TokenStorage().token
+    
+    var nameLabel = UILabel()
+    var nickNameLabel = UILabel()
+    var statusLabel = UILabel()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -14,6 +20,22 @@ final class ProfileViewController: UIViewController {
         addProfilePhoto()
         addLogOutButton()
         addLabels()
+        updateProfile()
+    }
+    
+    private func updateProfile() {
+        guard let authToken = authToken else { return }
+        profileService.fetchProfile(authToken) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let profile):
+                self.nameLabel.text = profile.name
+                self.nickNameLabel.text = profile.loginName
+                self.statusLabel.text = profile.bio
+            case .failure:
+                break
+            }
+        }
     }
     
     private func addProfilePhoto() {
@@ -48,10 +70,6 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addLabels() {
-        let nameLabel = UILabel()
-        let nickNameLabel = UILabel()
-        let statusLabel = UILabel()
-        
         nameLabel.text = "Екатерина Новикова"
         nickNameLabel.text = "@ekaterina_nov"
         statusLabel.text = "Hello, world!"
