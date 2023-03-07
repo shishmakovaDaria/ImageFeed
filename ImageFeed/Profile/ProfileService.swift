@@ -1,16 +1,6 @@
 import Foundation
 
 final class ProfileService {
-    private func profileRequest(token: String) -> URLRequest? {
-        var urlComponents = URLComponents(string: "\(Constants.DefaultBaseURL)")
-        urlComponents?.path = "/me"
-        guard let url = urlComponents?.url else { return nil}
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        return request
-    }
-    
     private func object(
         for request: URLRequest,
         completion: @escaping (Result<ProfileResult, Error>) -> Void
@@ -34,19 +24,18 @@ final class ProfileService {
         _ token: String,
         completion: @escaping (Result<Profile, Error>) -> Void
     ) {
-        let request = profileRequest(token: token)
-        if let request = request {
-            let _ = object(for: request) { result in
-                switch result {
-                case .success(let body):
-                    let userName = body.userName
-                    let name = "\(body.firstName) \(body.lastName)"
-                    let loginName = "@\(body.userName)"
-                    let bio = body.bio
-                    completion(.success(Profile(userName: userName, name: name, loginName: loginName, bio: bio)))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+        var profileRequest = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
+        profileRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let _ = object(for: profileRequest) { result in
+            switch result {
+            case .success(let body):
+                let userName = body.userName
+                let name = "\(body.firstName) \(body.lastName)"
+                let loginName = "@\(body.userName)"
+                let bio = body.bio
+                completion(.success(Profile(userName: userName, name: name, loginName: loginName, bio: bio)))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
