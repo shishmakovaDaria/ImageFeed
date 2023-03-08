@@ -2,13 +2,13 @@ import Foundation
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    let profilePhoto = UIImageView()
-    let profileService = ProfileService()
-    let authToken = OAuth2TokenStorage().token
     
-    var nameLabel = UILabel()
-    var nickNameLabel = UILabel()
-    var statusLabel = UILabel()
+    private let profilePhoto = UIImageView()    
+    private var nameLabel = UILabel()
+    private var nickNameLabel = UILabel()
+    private var statusLabel = UILabel()
+    private let profileService = ProfileService.shared
+    private let profile = ProfileService.shared.profile
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -20,22 +20,14 @@ final class ProfileViewController: UIViewController {
         addProfilePhoto()
         addLogOutButton()
         addLabels()
-        updateProfile()
+        guard let profile = profile else { return }
+        updateProfileDetails(profile: profile)
     }
     
-    private func updateProfile() {
-        guard let authToken = authToken else { return }
-        profileService.fetchProfile(authToken) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let profile):
-                self.nameLabel.text = profile.name
-                self.nickNameLabel.text = profile.loginName
-                self.statusLabel.text = profile.bio
-            case .failure:
-                break
-            }
-        }
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel.text = profile.name
+        nickNameLabel.text = profile.loginName
+        statusLabel.text = profile.bio
     }
     
     private func addProfilePhoto() {
