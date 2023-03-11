@@ -65,9 +65,22 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
             case .success:
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
+                self.fetchProfileImageURL(username: self.profileService.profile?.userName ?? "")
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 // TODO [Sprint 11] Показать ошибку
+                break
+            }
+        }
+    }
+    
+    private func fetchProfileImageURL(username: String) {
+        ProfileImageService.shared.fetchProfileImageURL(username) { result in
+            switch result {
+            case .success(let avatarURL):
+                print(avatarURL)
+            case .failure(let error):
+                print(error)
                 break
             }
         }

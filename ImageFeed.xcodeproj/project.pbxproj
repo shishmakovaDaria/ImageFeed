@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		611D69DB29BB8AAA00AD80B7 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611D69DA29BB8AAA00AD80B7 /* ProfileImageService.swift */; };
 		612115A92970A6ED006DD4B3 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612115A82970A6ED006DD4B3 /* UIColor.swift */; };
 		612E425229A0F14D0036F2F2 /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612E425129A0F14D0036F2F2 /* OAuthTokenResponseBody.swift */; };
 		612E425429A0F3990036F2F2 /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612E425329A0F3990036F2F2 /* OAuth2Service.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		611D69DA29BB8AAA00AD80B7 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		612115A82970A6ED006DD4B3 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		612E425129A0F14D0036F2F2 /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
 		612E425329A0F3990036F2F2 /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			children = (
 				6145D2782979CF1300784144 /* ProfileViewController.swift */,
 				619BABAD29B65A7F009400B1 /* ProfileService.swift */,
+				611D69DA29BB8AAA00AD80B7 /* ProfileImageService.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				619BABAE29B65A7F009400B1 /* ProfileService.swift in Sources */,
 				616ED6C52995759600D1D43E /* AuthViewController.swift in Sources */,
 				61C3C02429A92ADA005BCE1E /* CustomNavigationController.swift in Sources */,
+				611D69DB29BB8AAA00AD80B7 /* ProfileImageService.swift in Sources */,
 				61A6CA5C299023F600EE017C /* Constants.swift in Sources */,
 				619BABAC29B519BE009400B1 /* UIBlockingProgressHUD.swift in Sources */,
 			);
