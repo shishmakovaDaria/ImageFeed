@@ -78,6 +78,8 @@
 			children = (
 				61A6CA5B299023F600EE017C /* Constants.swift */,
 				612115A82970A6ED006DD4B3 /* UIColor.swift */,
+				612E425529A1389A0036F2F2 /* URLSessionExtension.swift */,
+				612E425729A141390036F2F2 /* URLRequestExtension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -88,8 +90,6 @@
 				612E425329A0F3990036F2F2 /* OAuth2Service.swift */,
 				612E425929A2B3CE0036F2F2 /* OAuth2TokenStorage.swift */,
 				612E425129A0F14D0036F2F2 /* OAuthTokenResponseBody.swift */,
-				612E425729A141390036F2F2 /* URLRequestExtension.swift */,
-				612E425529A1389A0036F2F2 /* URLSessionExtension.swift */,
 			);
 			path = OAuth2;
 			sourceTree = "<group>";

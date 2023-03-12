@@ -33,25 +33,6 @@ final class OAuth2Service {
         return request
     }
     
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
-    ) -> URLSessionTask {
-        return URLSession.shared.data(for: request) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                do {
-                    let object = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(object))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func fetchAuthToken(
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void
@@ -62,7 +43,7 @@ final class OAuth2Service {
         lastCode = code
         let request = authTokenRequest(code: code)
         if let request = request {
-            let task = object(for: request) { [weak self] result in
+            let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
                 DispatchQueue.main.async {
                     guard let self = self else { return }
                     switch result {

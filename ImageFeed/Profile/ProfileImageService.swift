@@ -7,25 +7,6 @@ final class ProfileImageService {
     private (set) var avatarURL: String?
     static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<UserResult, Error>) -> Void
-    ) -> URLSessionTask {
-        return URLSession.shared.data(for: request) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                do {
-                    let object = try JSONDecoder().decode(UserResult.self, from: data)
-                    completion(.success(object))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func fetchProfileImageURL(
         _ username: String,
         _ completion: @escaping (Result<String, Error>) -> Void
@@ -34,7 +15,8 @@ final class ProfileImageService {
         task?.cancel()
         var profileImageRequest = URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET")
         profileImageRequest.setValue("Bearer \(OAuth2TokenStorage().token ?? "")", forHTTPHeaderField: "Authorization")
-        let task = object(for: profileImageRequest) { [weak self] result in
+        
+        let task = URLSession.shared.objectTask(for: profileImageRequest) { [weak self] (result: Result<UserResult, Error>) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch result {

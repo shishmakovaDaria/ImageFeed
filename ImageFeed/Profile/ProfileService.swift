@@ -8,25 +8,6 @@ final class ProfileService {
     
     private var task: URLSessionTask?
     
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<ProfileResult, Error>) -> Void
-    ) -> URLSessionTask {
-        return URLSession.shared.data(for: request) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                do {
-                    let object = try JSONDecoder().decode(ProfileResult.self, from: data)
-                    completion(.success(object))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func fetchProfile(
         _ token: String,
         completion: @escaping (Result<Profile, Error>) -> Void
@@ -35,7 +16,7 @@ final class ProfileService {
         task?.cancel()
         var profileRequest = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
         profileRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let task = object(for: profileRequest) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: profileRequest) { [weak self] (result: Result<ProfileResult, Error>) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch result {
