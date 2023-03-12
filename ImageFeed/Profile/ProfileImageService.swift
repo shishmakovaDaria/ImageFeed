@@ -3,10 +3,9 @@ import Foundation
 final class ProfileImageService {
     
     static let shared = ProfileImageService()
-    
     private var task: URLSessionTask?
-    
     private (set) var avatarURL: String?
+    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     private func object(
         for request: URLRequest,
@@ -44,6 +43,11 @@ final class ProfileImageService {
                     self.avatarURL = avatarURL
                     print("А В А Т А Р  П Р О Ф И Л Я  П О Л У Ч Е Н ")
                     completion(.success(avatarURL))
+                    NotificationCenter.default
+                        .post(
+                            name: ProfileImageService.DidChangeNotification,
+                            object: self,
+                            userInfo: ["URL": avatarURL])
                 case .failure(let error):
                     completion(.failure(error))
                 }

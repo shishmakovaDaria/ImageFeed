@@ -9,6 +9,7 @@ final class ProfileViewController: UIViewController {
     private var statusLabel = UILabel()
     private let profileService = ProfileService.shared
     private let profile = ProfileService.shared.profile
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -22,6 +23,23 @@ final class ProfileViewController: UIViewController {
         addLabels()
         guard let profile = profile else { return }
         updateProfileDetails(profile: profile)
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) {[weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        guard let avatarURL = ProfileImageService.shared.avatarURL,
+              let url = URL(string: avatarURL)
+        else { return }
+        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
     }
     
     private func updateProfileDetails(profile: Profile) {
