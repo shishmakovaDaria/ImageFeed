@@ -52,7 +52,7 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
                 self.fetchProfile(token: token)
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                // TODO [Sprint 11] Показать ошибку
+                self.showAlert()
                 break
             }
         }
@@ -68,7 +68,7 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
                 self.fetchProfileImageURL(username: self.profileService.profile?.userName ?? "")
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                // TODO [Sprint 11] Показать ошибку
+                self.showAlert()
                 break
             }
         }
@@ -84,5 +84,16 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
                 break
             }
         }
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Что-то пошло не так(",
+                                      message: "Не удалось войти в систему",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "ОК", style: .default) {_ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }
