@@ -50,9 +50,10 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
             switch result {
             case .success(let token):
                 self.fetchProfile(token: token)
-            case .failure:
+            case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
                 self.showAlert()
+                print(error)
                 break
             }
         }
@@ -66,9 +67,10 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
                 self.fetchProfileImageURL(username: self.profileService.profile?.userName ?? "")
-            case .failure:
+            case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
                 self.showAlert()
+                print(error)
                 break
             }
         }

@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -39,7 +40,15 @@ final class ProfileViewController: UIViewController {
         guard let avatarURL = ProfileImageService.shared.avatarURL,
               let url = URL(string: avatarURL)
         else { return }
-        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+        let cache = ImageCache.default
+        cache.diskStorage.config.expiration = .days(30)
+        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .clear)
+        profilePhoto.kf.indicatorType = .activity
+        profilePhoto.kf.setImage(with: url,
+                                 placeholder: UIImage(named: "placeholder"),
+                                 options: [.processor(processor),
+                                           .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        profilePhoto.backgroundColor = .clear
     }
     
     private func updateProfileDetails(profile: Profile) {
@@ -50,6 +59,7 @@ final class ProfileViewController: UIViewController {
     
     private func addProfilePhoto() {
         profilePhoto.image = UIImage(named: "Photo")
+        profilePhoto.clipsToBounds = true
         view.addSubview(profilePhoto)
         profilePhoto.translatesAutoresizingMaskIntoConstraints = false
         

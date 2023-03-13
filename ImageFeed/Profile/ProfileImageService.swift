@@ -21,7 +21,7 @@ final class ProfileImageService {
                 guard let self = self else { return }
                 switch result {
                 case .success(let body):
-                    let avatarURL = body.profileImage.small
+                    let avatarURL = body.profileImage.large
                     self.avatarURL = avatarURL
                     print("А В А Т А Р  П Р О Ф И Л Я  П О Л У Ч Е Н ")
                     completion(.success(avatarURL))
