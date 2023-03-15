@@ -4,8 +4,6 @@ import ProgressHUD
 
 final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     
-    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    
     private let oAuth2Service = OAuth2Service()
     private let oAuth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
@@ -19,19 +17,29 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
         if oAuth2TokenStorage.token != nil {
             fetchProfile(token: oAuth2TokenStorage.token ?? "")
         } else {
-            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+            guard let authViewController = UIStoryboard(name: "Main",bundle: .main
+            ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true, completion: nil)
         }
     }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        addVector()
+    }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthenticationScreenSegueIdentifier {
-            guard let navigationController = segue.destination as? UINavigationController,
-                  let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for \(showAuthenticationScreenSegueIdentifier)") }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+    private func addVector() {
+        let vector = UIImageView()
+        vector.image = UIImage(named: "Vector")
+        view.addSubview(vector)
+        vector.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            vector.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            vector.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     private func switchToTabBarController() {
