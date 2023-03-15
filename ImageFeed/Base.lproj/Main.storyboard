@@ -14,7 +14,7 @@
         <!--ImageList-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ImagesListViewController" title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -136,25 +136,10 @@
             </objects>
             <point key="canvasLocation" x="652.67175572519079" y="-902.11267605633805"/>
         </scene>
-        <!--ProfileView-->
-        <scene sceneID="LJ7-QL-0ma">
-            <objects>
-                <viewController title="ProfileView" id="ebK-py-mT3" customClass="ProfileViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Zcd-pu-pgg">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="4S4-ex-bED"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="y8G-qL-7kY"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="f36-y4-9Tu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="652.67175572519079" y="-80.281690140845072"/>
-        </scene>
-        <!--Tab Bar Controller-->
+        <!--TabBar-->
         <scene sceneID="xlf-Wr-U1Z">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarViewController" id="E0k-nc-137" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" id="E0k-nc-137" userLabel="TabBar" customClass="TabBarController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VOX-pS-7Le">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -163,10 +148,6 @@
                             <color key="backgroundColor" name="YP Black"/>
                         </tabBarAppearance>
                     </tabBar>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="C4N-Pv-1y9"/>
-                        <segue destination="ebK-py-mT3" kind="relationship" relationship="viewControllers" id="3bz-UB-Cyh"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MrJ-e4-FQ7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -408,7 +389,6 @@
         <image name="chevron.backward" width="9" height="15.666666984558105"/>
         <image name="nav_back_button" width="9" height="15.666666984558105"/>
         <image name="tab_editorial_active" width="20" height="22"/>
-        <image name="tab_profile_active" width="24" height="24"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
