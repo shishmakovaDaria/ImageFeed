@@ -14,26 +14,24 @@ final class ProfileService {
     ) {
         assert(Thread.isMainThread)
         task?.cancel()
-        var profileRequest = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
+        guard var profileRequest = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET") else { return }
         profileRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.objectTask(for: profileRequest) { [weak self] (result: Result<ProfileResult, Error>) in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                switch result {
-                case .success(let body):
-                    let userName = body.userName
-                    let name = "\(body.firstName) \(body.lastName)"
-                    let loginName = "@\(body.userName)"
-                    let bio = body.bio
-                    let profile = Profile(userName: userName, name: name, loginName: loginName, bio: bio)
-                    self.profile = profile
-                    print("ДАННЫЕ ПРОФИЛЯ П О Л У Ч Е Н Ы")
-                    completion(.success(profile))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+            guard let self = self else { return }
+            switch result {
+            case .success(let body):
+                let userName = body.userName
+                let name = "\(body.firstName) \(body.lastName)"
+                let loginName = "@\(body.userName)"
+                let bio = body.bio
+                let profile = Profile(userName: userName, name: name, loginName: loginName, bio: bio)
+                self.profile = profile
+                completion(.success(profile))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
+        task.resume()
         self.task = task
     }
 }

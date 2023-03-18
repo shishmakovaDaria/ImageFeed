@@ -4,10 +4,10 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    private let profilePhoto = UIImageView()    
-    private var nameLabel = UILabel()
-    private var nickNameLabel = UILabel()
-    private var statusLabel = UILabel()
+    private lazy var profilePhoto = UIImageView()
+    private lazy var nameLabel = UILabel()
+    private lazy var nickNameLabel = UILabel()
+    private lazy var statusLabel = UILabel()
     private let profileService = ProfileService.shared
     private let profile = ProfileService.shared.profile
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -26,7 +26,7 @@ final class ProfileViewController: UIViewController {
         updateProfileDetails(profile: profile)
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
-                forName: ProfileImageService.DidChangeNotification,
+                forName: SplashViewController.DidChangeNotification,
                 object: nil,
                 queue: .main
             ) {[weak self] _ in

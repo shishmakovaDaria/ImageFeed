@@ -5,7 +5,6 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private var task: URLSessionTask?
     private (set) var avatarURL: String?
-    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     func fetchProfileImageURL(
         _ username: String,
@@ -13,28 +12,21 @@ final class ProfileImageService {
     ) {
         assert(Thread.isMainThread)
         task?.cancel()
-        var profileImageRequest = URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET")
+        guard var profileImageRequest = URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET") else  { return }
         profileImageRequest.setValue("Bearer \(OAuth2TokenStorage().token ?? "")", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.objectTask(for: profileImageRequest) { [weak self] (result: Result<UserResult, Error>) in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                switch result {
-                case .success(let body):
-                    let avatarURL = body.profileImage.large
-                    self.avatarURL = avatarURL
-                    print("А В А Т А Р  П Р О Ф И Л Я  П О Л У Ч Е Н ")
-                    completion(.success(avatarURL))
-                    NotificationCenter.default
-                        .post(
-                            name: ProfileImageService.DidChangeNotification,
-                            object: self,
-                            userInfo: ["URL": avatarURL])
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+            guard let self = self else { return }
+            switch result {
+            case .success(let body):
+                let avatarURL = body.profileImage.large
+                self.avatarURL = avatarURL
+                completion(.success(avatarURL))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
+        task.resume()
         self.task = task
     }
 }

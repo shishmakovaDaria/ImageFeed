@@ -18,26 +18,22 @@ extension URLSession {
         }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                   if 200 ..< 300 ~= statusCode {
-                       do {
-                           let object = try JSONDecoder().decode(T.self, from: data)
-                           fulfillCompletion(.success(object))
-                       } catch {
-                           fulfillCompletion(.failure(error))
-                       }
-                   } else {
-                       fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
-                   }
-            } else if let error = error {
-                fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
-            } else {
+            if let error = error { fulfillCompletion(.failure(NetworkError.urlRequestError(error))) }
+            guard let data = data,
+                let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 fulfillCompletion(.failure(NetworkError.urlSessionError))
+                return
             }
+            
+            if 200 ..< 300 ~= statusCode {
+                do {
+                    let object = try JSONDecoder().decode(T.self, from: data)
+                    fulfillCompletion(.success(object))
+                } catch {
+                    fulfillCompletion(.failure(error))
+                }
+            } else { fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode))) }
         }
-        task.resume()
         return task
     }
 }

@@ -7,6 +7,7 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     private let oAuth2Service = OAuth2Service()
     private let oAuth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
+    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -70,16 +71,14 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     private func fetchProfile(token: String) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
+            UIBlockingProgressHUD.dismiss()
             switch result {
             case .success:
-                UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
                 self.fetchProfileImageURL(username: self.profileService.profile?.userName ?? "")
             case .failure(let error):
-                UIBlockingProgressHUD.dismiss()
                 self.showAlert()
                 print(error)
-                break
             }
         }
     }
@@ -88,7 +87,11 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
         ProfileImageService.shared.fetchProfileImageURL(username) { result in
             switch result {
             case .success(let avatarURL):
-                print(avatarURL)
+                NotificationCenter.default
+                    .post(
+                        name: SplashViewController.DidChangeNotification,
+                        object: self,
+                        userInfo: ["URL": avatarURL])
             case .failure(let error):
                 print(error)
                 break

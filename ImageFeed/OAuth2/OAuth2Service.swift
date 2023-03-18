@@ -21,9 +21,9 @@ final class OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest? {
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")
         urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.AccessKey),
-            URLQueryItem(name: "client_secret", value: Constants.SecretKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "client_secret", value: Constants.secretKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "grant_type", value: "authorization_code")
         ]
@@ -44,20 +44,19 @@ final class OAuth2Service {
         let request = authTokenRequest(code: code)
         if let request = request {
             let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-                DispatchQueue.main.async {
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let body):
-                        let authToken = body.accessToken
-                        self.authToken = authToken
-                        completion(.success(authToken))
-                        self.task = nil
-                    case .failure(let error):
-                        completion(.failure(error))
-                        self.lastCode = nil
-                    }
+                guard let self = self else { return }
+                switch result {
+                case .success(let body):
+                    let authToken = body.accessToken
+                    self.authToken = authToken
+                    completion(.success(authToken))
+                    self.task = nil
+                case .failure(let error):
+                    completion(.failure(error))
+                    self.lastCode = nil
                 }
             }
+            task.resume()
             self.task = task
         }
     }

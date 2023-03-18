@@ -10,7 +10,7 @@ protocol WebViewViewControllerDelegate: AnyObject {
 final class WebViewViewController: UIViewController {
     
     weak var delegate: WebViewViewControllerDelegate?
-    let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     @IBOutlet private weak var webView: WKWebView!
@@ -50,12 +50,12 @@ final class WebViewViewController: UIViewController {
     }
     
     private func authorizeRequest() -> URLRequest? {
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)
+        var urlComponents = URLComponents(string: unsplashAuthorizeURLString)
         urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.AccessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.AccessScope)
+            URLQueryItem(name: "scope", value: Constants.accessScope)
         ]
         guard let url = urlComponents?.url else { return nil}
         return URLRequest(url: url)
