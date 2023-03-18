@@ -15,12 +15,15 @@ final class OAuth2Service {
         }
     }
     
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
     private func authTokenRequest(code: String) -> URLRequest? {
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")
         urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.AccessKey),
-            URLQueryItem(name: "client_secret", value: Constants.SecretKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "client_secret", value: Constants.secretKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "grant_type", value: "authorization_code")
         ]
@@ -30,42 +33,31 @@ final class OAuth2Service {
         return request
     }
     
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
-    ) -> URLSessionTask {
-        return URLSession.shared.data(for: request) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                do {
-                    let object = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(object))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func fetchAuthToken(
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
+        assert(Thread.isMainThread)
+        if lastCode == code { return }
+        task?.cancel()
+        lastCode = code
         let request = authTokenRequest(code: code)
         if let request = request {
-            _ = object(for: request) { [weak self] result in
+            let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
                 guard let self = self else { return }
                 switch result {
                 case .success(let body):
                     let authToken = body.accessToken
                     self.authToken = authToken
                     completion(.success(authToken))
+                    self.task = nil
                 case .failure(let error):
                     completion(.failure(error))
+                    self.lastCode = nil
                 }
             }
+            task.resume()
+            self.task = task
         }
     }
 }

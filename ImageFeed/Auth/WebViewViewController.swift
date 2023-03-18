@@ -10,7 +10,8 @@ protocol WebViewViewControllerDelegate: AnyObject {
 final class WebViewViewController: UIViewController {
     
     weak var delegate: WebViewViewControllerDelegate?
-    let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     @IBOutlet private weak var webView: WKWebView!
     @IBOutlet private weak var progressView: UIProgressView!
@@ -19,43 +20,21 @@ final class WebViewViewController: UIViewController {
         .darkContent
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        
-        updateProgress()
-    }
-    
     override func viewDidLoad() {
         if let request = authorizeRequest() {
             webView.load(request)
         }
         
         webView.navigationDelegate = self
+        
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
         updateProgress()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        webView.removeObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            context: nil)
-    }
-    
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
@@ -71,12 +50,12 @@ final class WebViewViewController: UIViewController {
     }
     
     private func authorizeRequest() -> URLRequest? {
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)
+        var urlComponents = URLComponents(string: unsplashAuthorizeURLString)
         urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.AccessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.AccessScope)
+            URLQueryItem(name: "scope", value: Constants.accessScope)
         ]
         guard let url = urlComponents?.url else { return nil}
         return URLRequest(url: url)

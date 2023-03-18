@@ -1,8 +1,16 @@
 import Foundation
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    let profilePhoto = UIImageView()
+    
+    private lazy var profilePhoto = UIImageView()
+    private lazy var nameLabel = UILabel()
+    private lazy var nickNameLabel = UILabel()
+    private lazy var statusLabel = UILabel()
+    private let profileService = ProfileService.shared
+    private let profile = ProfileService.shared.profile
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -14,10 +22,44 @@ final class ProfileViewController: UIViewController {
         addProfilePhoto()
         addLogOutButton()
         addLabels()
+        guard let profile = profile else { return }
+        updateProfileDetails(profile: profile)
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: SplashViewController.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) {[weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        guard let avatarURL = ProfileImageService.shared.avatarURL,
+              let url = URL(string: avatarURL)
+        else { return }
+        let cache = ImageCache.default
+        cache.diskStorage.config.expiration = .days(30)
+        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .clear)
+        profilePhoto.kf.indicatorType = .activity
+        profilePhoto.kf.setImage(with: url,
+                                 placeholder: UIImage(named: "placeholder"),
+                                 options: [.processor(processor),
+                                           .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        profilePhoto.backgroundColor = .clear
+    }
+    
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel.text = profile.name
+        nickNameLabel.text = profile.loginName
+        statusLabel.text = profile.bio
     }
     
     private func addProfilePhoto() {
         profilePhoto.image = UIImage(named: "Photo")
+        profilePhoto.clipsToBounds = true
         view.addSubview(profilePhoto)
         profilePhoto.translatesAutoresizingMaskIntoConstraints = false
         
@@ -48,10 +90,6 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addLabels() {
-        let nameLabel = UILabel()
-        let nickNameLabel = UILabel()
-        let statusLabel = UILabel()
-        
         nameLabel.text = "Екатерина Новикова"
         nickNameLabel.text = "@ekaterina_nov"
         statusLabel.text = "Hello, world!"
