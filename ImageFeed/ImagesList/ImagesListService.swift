@@ -5,6 +5,7 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     private var task: URLSessionTask?
+    static let shared = ImagesListService()
     
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
@@ -14,29 +15,30 @@ final class ImagesListService {
         : (lastLoadedPage ?? 0) + 1
         guard var imagesRequest = URLRequest.makeHTTPRequest(path: "/photos?page=\(nextPage)", httpMethod: "GET") else { return }
         imagesRequest.setValue("Client-ID \(Constants.accessKey)", forHTTPHeaderField: "Authorization")
-        print(imagesRequest)
         let task = URLSession.shared.objectTask(for: imagesRequest) {[weak self] (result: Result<Array<PhotoResult>, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let body):
-                for i in 0..<body.count {
-                    let id = body[i].id
-                    let size = CGSize(width: body[i].width, height: body[i].height)
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-                    let createdAt = dateFormatter.date(from: body[i].createdAt)
-                    let welcomeDescription = body[i].welcomeDescription
-                    let thumbImageURL = body[i].urls.thumb
-                    let largeImageURL = body[i].urls.full
-                    let isLiked = body[i].isLiked
-                    let newPhoto = Photo(id: id, size: size, createdAt: createdAt, welcomeDescription: welcomeDescription, thumbImageURL: thumbImageURL, largeImageURL: largeImageURL, isLiked: isLiked)
-                    self.photos.append(newPhoto)
+                DispatchQueue.main.async {
+                    for i in 0..<body.count {
+                        let id = body[i].id
+                        let size = CGSize(width: body[i].width, height: body[i].height)
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                        let createdAt = dateFormatter.date(from: body[i].createdAt)
+                        let welcomeDescription = body[i].welcomeDescription
+                        let thumbImageURL = body[i].urls.thumb
+                        let largeImageURL = body[i].urls.regular
+                        let isLiked = body[i].isLiked
+                        let newPhoto = Photo(id: id, size: size, createdAt: createdAt, welcomeDescription: welcomeDescription, thumbImageURL: thumbImageURL, largeImageURL: largeImageURL, isLiked: isLiked)
+                        self.photos.append(newPhoto)
+                    }
+                    NotificationCenter.default
+                        .post(
+                            name: ImagesListService.DidChangeNotification,
+                            object: self,
+                            userInfo: ["newPhotos": self.photos])
                 }
-                NotificationCenter.default
-                    .post(
-                        name: ImagesListService.DidChangeNotification,
-                        object: self,
-                        userInfo: ["newPhotos": self.photos])
             case .failure(let error):
                 print(error)
             }
@@ -82,11 +84,11 @@ struct PhotoResult: Codable {
 }
 
 struct UrlsResult: Codable {
-    let full: String
+    let regular: String
     let thumb: String
     
     enum CodingKeys: String, CodingKey {
-        case full
+        case regular
         case thumb
     }
 }

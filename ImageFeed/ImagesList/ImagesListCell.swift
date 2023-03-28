@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
     
@@ -22,5 +23,10 @@ final class ImagesListCell: UITableViewCell {
         super.awakeFromNib()
         
         self.makeGradient()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask()
     }
 }
