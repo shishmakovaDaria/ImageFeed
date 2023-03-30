@@ -51,6 +51,38 @@ final class ImagesListService {
             lastLoadedPage? += 1
         }
     }
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        guard var likeRequest = URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like", httpMethod: (isLike ? "DELETE" : "POST")) else { return }
+        print(likeRequest.httpMethod!)
+        likeRequest.setValue("Bearer \(OAuth2TokenStorage().token ?? "")", forHTTPHeaderField: "Authorization")
+        let task = URLSession.shared.objectTask(for: likeRequest) {[weak self] (result: Result<LikeResult, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    if let index = self.photos.firstIndex(where: {$0.id == photoId}) {
+                        let photo = self.photos[index]
+                        let newPhoto = Photo(
+                            id: photo.id,
+                            size: photo.size,
+                            createdAt: photo.createdAt,
+                            welcomeDescription: photo.welcomeDescription,
+                            thumbImageURL: photo.thumbImageURL,
+                            largeImageURL: photo.largeImageURL,
+                            isLiked: !photo.isLiked
+                        )
+                        self.photos[index] = newPhoto
+                    }
+                }
+                completion(.success(Void()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+        self.task = task
+    }
 }
 
 struct Photo {
@@ -90,5 +122,23 @@ struct UrlsResult: Codable {
     enum CodingKeys: String, CodingKey {
         case regular
         case thumb
+    }
+}
+
+struct LikeResult: Codable {
+    let photo: PhotoResult
+    let user: User
+    
+    enum CodingKeys: String, CodingKey {
+        case photo
+        case user
+    }
+}
+
+struct User: Codable {
+    let id: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
     }
 }

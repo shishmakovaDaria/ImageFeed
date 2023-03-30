@@ -1,5 +1,6 @@
 import UIKit
 import Kingfisher
+import ProgressHUD
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -35,8 +36,30 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imagesListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
+        imagesListCell.delegate = self
         configCell(for: imagesListCell, with: indexPath)
         return imagesListCell
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.photos = self.imagesListService.photos
+                cell.setIsLiked(photoIsLiked: self.photos[indexPath.row].isLiked)
+                UIBlockingProgressHUD.dismiss()
+                print(photo)
+            case .failure(let error):
+                UIBlockingProgressHUD.dismiss()
+                print(error)
+            }
+        }
     }
 }
 
@@ -103,12 +126,7 @@ final class ImagesListViewController: UIViewController {
         
         guard let photosDate = photos[indexPath.row].createdAt else { return }
         cell.dateLabel.text = dateFormatter.string(from: photosDate)
-        
-        if indexPath.row % 2 == 0 {
-            cell.likeButton.imageView?.image = UIImage(named: "Like Inactive")
-        } else {
-            cell.likeButton.imageView?.image = UIImage(named: "Like Active")
-        }
+        cell.likeButton.imageView?.image = UIImage(named: "Like Inactive")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

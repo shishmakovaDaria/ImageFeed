@@ -62,6 +62,9 @@
                                                             </hierarchicalColors>
                                                         </imageReference>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked:" destination="fJd-L6-9uI" eventType="touchUpInside" id="Jw4-3s-ZKH"/>
+                                                    </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="urE-1Z-kN6" userLabel="Gradient View">
                                                     <rect key="frame" x="16" y="153" width="361" height="30"/>
