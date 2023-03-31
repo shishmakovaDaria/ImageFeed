@@ -54,7 +54,7 @@
                                                         </imageReference>
                                                     </state>
                                                     <buttonConfiguration key="configuration" style="plain">
-                                                        <imageReference key="image" image="Like Active" symbolScale="large" renderingMode="hierarchical-single">
+                                                        <imageReference key="image" image="Like Inactive" symbolScale="large" renderingMode="hierarchical-single">
                                                             <hierarchicalColors>
                                                                 <color systemColor="labelColor"/>
                                                                 <color systemColor="secondaryLabelColor"/>
@@ -358,6 +358,7 @@
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="Like Active" width="29.333333969116211" height="26"/>
+        <image name="Like Inactive" width="29.333333969116211" height="26"/>
         <image name="Share Button" width="50.333332061767578" height="50"/>
         <image name="auth_screen_logo" width="60" height="60"/>
         <image name="chevron.backward" width="9" height="15.666666984558105"/>

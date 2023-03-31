@@ -52,7 +52,6 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     
     //MARK: - AuthViewControllerDelegate
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        ProgressHUD.animationType = .circleRotateChase
         UIBlockingProgressHUD.show()
         oAuth2Service.fetchAuthToken(code) { [weak self] result in
             guard let self = self else { return }
@@ -69,6 +68,7 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     }
     
     private func fetchProfile(token: String) {
+        UIBlockingProgressHUD.show()
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             UIBlockingProgressHUD.dismiss()

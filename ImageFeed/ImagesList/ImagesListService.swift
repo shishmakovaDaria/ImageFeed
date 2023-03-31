@@ -54,7 +54,6 @@ final class ImagesListService {
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         guard var likeRequest = URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like", httpMethod: (isLike ? "DELETE" : "POST")) else { return }
-        print(likeRequest.httpMethod!)
         likeRequest.setValue("Bearer \(OAuth2TokenStorage().token ?? "")", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.objectTask(for: likeRequest) {[weak self] (result: Result<LikeResult, Error>) in
             guard let self = self else { return }
@@ -73,9 +72,9 @@ final class ImagesListService {
                             isLiked: !photo.isLiked
                         )
                         self.photos[index] = newPhoto
+                        completion(.success(Void()))
                     }
                 }
-                completion(.success(Void()))
             case .failure(let error):
                 completion(.failure(error))
             }

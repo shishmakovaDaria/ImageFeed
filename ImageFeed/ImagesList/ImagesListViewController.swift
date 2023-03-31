@@ -54,7 +54,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(photoIsLiked: self.photos[indexPath.row].isLiked)
                 UIBlockingProgressHUD.dismiss()
-                print(photo)
             case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
                 print(error)
@@ -126,23 +125,22 @@ final class ImagesListViewController: UIViewController {
         
         guard let photosDate = photos[indexPath.row].createdAt else { return }
         cell.dateLabel.text = dateFormatter.string(from: photosDate)
-        cell.likeButton.imageView?.image = UIImage(named: "Like Inactive")
+        
+        let photoLike = photos[indexPath.row].isLiked
+        
+        if photoLike {
+            cell.likeButton.imageView?.image = UIImage(named: "Like Active")
+        } else {
+            cell.likeButton.imageView?.image = UIImage(named: "Like Inactive")
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
             guard let viewController = segue.destination as? SingleImageViewController else { return }
             guard let indexPath = sender as? IndexPath else { return }
-            let imageView = UIImageView()
-            let url = URL(string: photos[indexPath.row].largeImageURL)
-            imageView.kf.setImage(with: url, completionHandler: { result in
-                switch result {
-                case .success:
-                    viewController.image = imageView.image
-                case .failure(let KingfisherError):
-                    print(KingfisherError)
-                }
-            })
+            let url = photos[indexPath.row].largeImageURL
+            viewController.fullImageUrl = url
         } else {
             super.prepare(for: segue, sender: sender)
         }
