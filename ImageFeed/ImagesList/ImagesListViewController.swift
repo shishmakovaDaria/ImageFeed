@@ -126,13 +126,8 @@ final class ImagesListViewController: UIViewController {
         guard let photosDate = photos[indexPath.row].createdAt else { return }
         cell.dateLabel.text = dateFormatter.string(from: photosDate)
         
-        let photoLike = photos[indexPath.row].isLiked
-        
-        if photoLike {
-            cell.likeButton.imageView?.image = UIImage(named: "Like Active")
-        } else {
-            cell.likeButton.imageView?.image = UIImage(named: "Like Inactive")
-        }
+        let photoIsLiked = photos[indexPath.row].isLiked
+        cell.setIsLiked(photoIsLiked: photoIsLiked)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

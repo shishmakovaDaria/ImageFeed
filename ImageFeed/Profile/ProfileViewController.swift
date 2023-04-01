@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
@@ -11,6 +12,7 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profile = ProfileService.shared.profile
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let splashViewController = SplashViewController()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -57,6 +59,25 @@ final class ProfileViewController: UIViewController {
         statusLabel.text = profile.bio
     }
     
+    @IBAction private func logOutButtonDidTap(_ sender: Any?) {
+        OAuth2TokenStorage().token = nil
+        ProfileViewController.clean()
+        guard let authViewController = UIStoryboard(name: "Main",bundle: .main
+        ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        authViewController.delegate = splashViewController
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true, completion: nil)
+    }
+    
+    static func clean() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
+    }
+    
     private func addProfilePhoto() {
         profilePhoto.image = UIImage(named: "Photo")
         profilePhoto.clipsToBounds = true
@@ -76,6 +97,7 @@ final class ProfileViewController: UIViewController {
             with: UIImage(named: "ipad.and.arrow.forward")!,
             target: self,
             action: nil)
+        logOutButton.addTarget(self, action: #selector(logOutButtonDidTap(_:)), for: .touchUpInside)
         
         logOutButton.tintColor = .ypRed
         view.addSubview(logOutButton)
