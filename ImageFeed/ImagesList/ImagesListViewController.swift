@@ -118,14 +118,14 @@ final class ImagesListViewController: UIViewController {
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         cell.prepareForReuse()
+        cell.showGradientImage()
         let url = URL(string: photos[indexPath.row].thumbImageURL)
         let cache = ImageCache.default
         cache.diskStorage.config.expiration = .days(1)
-        cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.setImage(with: url,
-                                   placeholder: UIImage(named: "imagePlaceholder"),
                                    completionHandler: { [weak self] _ in
-                                   self?.tableView.reloadRows(at: [indexPath], with: .automatic)})
+                                      cell.hideGradientImage()
+                                      self?.tableView.reloadRows(at: [indexPath], with: .automatic)})
         
         guard let photosDate = photos[indexPath.row].createdAt else { return }
         cell.dateLabel.text = dateFormatter.string(from: photosDate)
