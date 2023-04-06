@@ -19,9 +19,9 @@ final class ProfileImageService {
             guard let self = self else { return }
             switch result {
             case .success(let body):
-                let avatarURL = body.profileImage.large
+                let avatarURL = body.profileImage?.large
                 self.avatarURL = avatarURL
-                completion(.success(avatarURL))
+                completion(.success(avatarURL ?? ""))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -32,7 +32,7 @@ final class ProfileImageService {
 }
 
 struct UserResult: Codable {
-    let profileImage: ProfileImageUrl
+    let profileImage: ProfileImageUrl?
     
     enum CodingKeys: String, CodingKey {
         case profileImage = "profile_image"

@@ -21,10 +21,14 @@ final class ProfileService {
             switch result {
             case .success(let body):
                 let userName = body.userName
-                let name = "\(body.firstName) \(body.lastName)"
+                let name = "\(body.firstName) \(body.lastName ?? "")"
                 let loginName = "@\(body.userName)"
                 let bio = body.bio
-                let profile = Profile(userName: userName, name: name, loginName: loginName, bio: bio)
+                let profile = Profile(
+                    userName: userName,
+                    name: name,
+                    loginName: loginName,
+                    bio: bio ?? "")
                 self.profile = profile
                 completion(.success(profile))
             case .failure(let error):
@@ -39,8 +43,8 @@ final class ProfileService {
 struct ProfileResult: Codable {
     let userName: String
     let firstName: String
-    let lastName: String
-    let bio: String
+    let lastName: String?
+    let bio: String?
     
     enum CodingKeys: String, CodingKey {
         case userName = "username"

@@ -60,13 +60,28 @@ final class ProfileViewController: UIViewController {
     }
     
     @IBAction private func logOutButtonDidTap(_ sender: Any?) {
-        OAuth2TokenStorage().token = nil
-        ProfileViewController.clean()
-        guard let authViewController = UIStoryboard(name: "Main",bundle: .main
-        ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
-        authViewController.delegate = splashViewController
-        authViewController.modalPresentationStyle = .fullScreen
-        present(authViewController, animated: true, completion: nil)
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены, что хотите выйти?",
+                                      preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            OAuth2TokenStorage().token = nil
+            ProfileViewController.clean()
+            guard let authViewController = UIStoryboard(name: "Main",bundle: .main
+            ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+            authViewController.delegate = self.splashViewController
+            authViewController.modalPresentationStyle = .fullScreen
+            self.present(authViewController, animated: true, completion: nil)
+        }
+        
+        let action2 = UIAlertAction(title: "Нет", style: .default) {_ in
+            alert.dismiss(animated: true)
+        }
+        
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
     }
     
     static func clean() {

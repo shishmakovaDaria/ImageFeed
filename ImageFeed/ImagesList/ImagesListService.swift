@@ -7,6 +7,35 @@ final class ImagesListService {
     private var task: URLSessionTask?
     static let shared = ImagesListService()
     
+    private func appendPhotos(body: [PhotoResult]) {
+        for item in body {
+            let id = item.id
+            let size = CGSize(width: item.width, height: item.height)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            let createdAt = dateFormatter.date(from: item.createdAt)
+            let welcomeDescription = item.welcomeDescription
+            let thumbImageURL = item.urls.thumb
+            let largeImageURL = item.urls.regular
+            let isLiked = item.isLiked
+            let newPhoto = Photo(
+                id: id,
+                size: size,
+                createdAt: createdAt,
+                welcomeDescription: welcomeDescription,
+                thumbImageURL: thumbImageURL,
+                largeImageURL: largeImageURL,
+                isLiked: isLiked
+            )
+            photos.append(newPhoto)
+        }
+        NotificationCenter.default
+            .post(
+                name: ImagesListService.DidChangeNotification,
+                object: self,
+                userInfo: ["newPhotos": self.photos])
+    }
+    
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         task?.cancel()
@@ -20,24 +49,7 @@ final class ImagesListService {
             switch result {
             case .success(let body):
                 DispatchQueue.main.async {
-                    for i in 0..<body.count {
-                        let id = body[i].id
-                        let size = CGSize(width: body[i].width, height: body[i].height)
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-                        let createdAt = dateFormatter.date(from: body[i].createdAt)
-                        let welcomeDescription = body[i].welcomeDescription
-                        let thumbImageURL = body[i].urls.thumb
-                        let largeImageURL = body[i].urls.regular
-                        let isLiked = body[i].isLiked
-                        let newPhoto = Photo(id: id, size: size, createdAt: createdAt, welcomeDescription: welcomeDescription, thumbImageURL: thumbImageURL, largeImageURL: largeImageURL, isLiked: isLiked)
-                        self.photos.append(newPhoto)
-                    }
-                    NotificationCenter.default
-                        .post(
-                            name: ImagesListService.DidChangeNotification,
-                            object: self,
-                            userInfo: ["newPhotos": self.photos])
+                    self.appendPhotos(body: body)
                 }
             case .failure(let error):
                 print(error)
