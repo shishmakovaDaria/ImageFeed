@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
@@ -11,6 +12,7 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profile = ProfileService.shared.profile
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let splashViewController = SplashViewController()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -57,6 +59,40 @@ final class ProfileViewController: UIViewController {
         statusLabel.text = profile.bio
     }
     
+    @IBAction private func logOutButtonDidTap(_ sender: Any?) {
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены, что хотите выйти?",
+                                      preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            OAuth2TokenStorage().token = nil
+            ProfileViewController.clean()
+            guard let authViewController = UIStoryboard(name: "Main",bundle: .main
+            ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+            authViewController.delegate = self.splashViewController
+            authViewController.modalPresentationStyle = .fullScreen
+            self.present(authViewController, animated: true, completion: nil)
+        }
+        
+        let action2 = UIAlertAction(title: "Нет", style: .default) {_ in
+            alert.dismiss(animated: true)
+        }
+        
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
+    }
+    
+    static func clean() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
+    }
+    
     private func addProfilePhoto() {
         profilePhoto.image = UIImage(named: "Photo")
         profilePhoto.clipsToBounds = true
@@ -76,6 +112,7 @@ final class ProfileViewController: UIViewController {
             with: UIImage(named: "ipad.and.arrow.forward")!,
             target: self,
             action: nil)
+        logOutButton.addTarget(self, action: #selector(logOutButtonDidTap(_:)), for: .touchUpInside)
         
         logOutButton.tintColor = .ypRed
         view.addSubview(logOutButton)

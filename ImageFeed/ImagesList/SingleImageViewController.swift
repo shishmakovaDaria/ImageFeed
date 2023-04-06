@@ -2,13 +2,7 @@ import Foundation
 import UIKit
 
 final class SingleImageViewController: UIViewController {
-    var image: UIImage? {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image ?? UIImage())
-        }
-    }
+    var fullImageUrl: String?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -19,10 +13,10 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.minimumZoomScale = min(scrollView.bounds.size.width / imageView.frame.size.width, scrollView.bounds.size.height / imageView.frame.size.height)
-        scrollView.maximumZoomScale = 8
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image ?? UIImage())
+        loadLargeImage(url: fullImageUrl ?? "")
+        scrollView.minimumZoomScale = 0.36
+        scrollView.maximumZoomScale = 1.25
+        rescaleAndCenterImageInScrollView(image: imageView.image ?? UIImage())
     }
     
     private func rescaleAndCenterImageInScrollView (image: UIImage) {
@@ -55,12 +49,44 @@ final class SingleImageViewController: UIViewController {
         scrollView.layoutIfNeeded()
     }
     
+    private func loadLargeImage(url: String) {
+        let url = URL(string: url)
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: url, completionHandler: { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showError()
+            }
+        })
+    }
+    
+    private func showError() {
+        let alert = UIAlertController(title: "Что-то пошло не так(",
+                                      message: "Попробовать ещё раз?",
+                                      preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Не надо", style: .default) {_ in
+            alert.dismiss(animated: true)
+        }
+        let action2 = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.loadLargeImage(url: self.fullImageUrl ?? "")
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
+    }
+    
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction private func didTapShareButton(_ sender: Any) {
-        let share = UIActivityViewController(activityItems: [image ?? UIImage()], applicationActivities: nil)
+        let share = UIActivityViewController(activityItems: [imageView.image ?? UIImage()], applicationActivities: nil)
         self.present(share, animated: true, completion: nil)
     }
 }
