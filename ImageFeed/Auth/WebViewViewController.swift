@@ -7,10 +7,17 @@ protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
-final class WebViewViewController: UIViewController {
+public protocol WebViewViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? { get set }
+    func load(request: URLRequest)
+    func setProgressValue(_ newValue: Float)
+    func setProgressHidden(_ isHidden: Bool)
+}
+
+final class WebViewViewController: UIViewController, WebViewViewControllerProtocol {
     
+    var presenter: WebViewPresenterProtocol?
     weak var delegate: WebViewViewControllerDelegate?
-    let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     @IBOutlet private weak var webView: WKWebView!
@@ -21,49 +28,35 @@ final class WebViewViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        if let request = authorizeRequest() {
-            webView.load(request)
-        }
+        super.viewDidLoad()
         
         webView.navigationDelegate = self
+        presenter?.viewDidLoad()
         
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
-                 self.updateProgress()
+                 self.presenter?.didUpdateProgressValue(self.webView.estimatedProgress)
              })
-        updateProgress()
+    }
+    
+    func load(request: URLRequest) {
+        webView.load(request)
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        guard
-            let url = navigationAction.request.url,
-            let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItems = items.first(where: { $0.name == "code" })
-        else { return nil }
-        
-        return codeItems.value
+        guard let url = navigationAction.request.url else { return nil }
+        return presenter?.code(from: url)
     }
     
-    private func authorizeRequest() -> URLRequest? {
-        var urlComponents = URLComponents(string: unsplashAuthorizeURLString)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
-        ]
-        guard let url = urlComponents?.url else { return nil}
-        return URLRequest(url: url)
+    func setProgressValue(_ newValue: Float) {
+        progressView.progress = newValue
     }
     
-    private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    func setProgressHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
     }
     
     @IBAction private func didTapBackButton(_ sender: Any?) {
