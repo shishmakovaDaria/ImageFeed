@@ -8,11 +8,15 @@ public protocol WebViewPresenterProtocol: AnyObject {
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
+    var authHelper: AuthHelperProtocol
     weak var view: WebViewViewControllerProtocol?
-    let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    
+    init(authHelper: AuthHelperProtocol) {
+        self.authHelper = authHelper
+    }
     
     func viewDidLoad() {
-        if let request = authorizeRequest() {
+        if let request = authHelper.authRequest() {
             view?.load(request: request)
         }
         
@@ -20,14 +24,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     }
     
     func code(from url: URL) -> String? {
-        guard
-            let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItems = items.first(where: { $0.name == "code" })
-        else { return nil }
-        
-        return codeItems.value
+        authHelper.code(from: url)
     }
     
     func didUpdateProgressValue(_ newValue: Double) {
@@ -40,17 +37,5 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     
     func shouldHideProgress(for value: Float) -> Bool {
         abs(value - 1.0) <= 0.0001
-    }
-    
-    private func authorizeRequest() -> URLRequest? {
-        var urlComponents = URLComponents(string: unsplashAuthorizeURLString)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
-        ]
-        guard let url = urlComponents?.url else { return nil}
-        return URLRequest(url: url)
     }
 }
