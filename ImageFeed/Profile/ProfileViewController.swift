@@ -3,16 +3,22 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
-    
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    func updateAvatar(url: URL)
+    func updateProfileDetails(name: String, login: String, bio: String)
+    func presentAuthViewController()
+    func showAlert(alert: UIAlertController)
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    var presenter: ProfilePresenterProtocol?
     private lazy var profilePhoto = UIImageView()
     private lazy var nameLabel = UILabel()
     private lazy var nickNameLabel = UILabel()
     private lazy var statusLabel = UILabel()
-    private let profileService = ProfileService.shared
-    private let profile = ProfileService.shared.profile
-    private var profileImageServiceObserver: NSObjectProtocol?
     private let splashViewController = SplashViewController()
+    private var alertPresenter: AlertPresenterProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -20,28 +26,17 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter = AlerPresenter(viewController: self)
+        
         view.backgroundColor = .ypBlack
         addProfilePhoto()
         addLogOutButton()
         addLabels()
-        guard let profile = profile else { return }
-        updateProfileDetails(profile: profile)
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: SplashViewController.DidChangeNotification,
-                object: nil,
-                queue: .main
-            ) {[weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
+        
+        presenter?.viewDidLoad()
     }
     
-    private func updateAvatar() {
-        guard let avatarURL = ProfileImageService.shared.avatarURL,
-              let url = URL(string: avatarURL)
-        else { return }
+    func updateAvatar(url: URL) {
         let cache = ImageCache.default
         cache.diskStorage.config.expiration = .days(30)
         let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .clear)
@@ -53,44 +48,26 @@ final class ProfileViewController: UIViewController {
         profilePhoto.backgroundColor = .clear
     }
     
-    private func updateProfileDetails(profile: Profile) {
-        nameLabel.text = profile.name
-        nickNameLabel.text = profile.loginName
-        statusLabel.text = profile.bio
+    func updateProfileDetails(name: String, login: String, bio: String) {
+        nameLabel.text = name
+        nickNameLabel.text = login
+        statusLabel.text = bio
     }
     
-    @IBAction private func logOutButtonDidTap(_ sender: Any?) {
-        let alert = UIAlertController(title: "Пока, пока!",
-                                      message: "Уверены, что хотите выйти?",
-                                      preferredStyle: .alert)
-        
-        let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            OAuth2TokenStorage().token = nil
-            ProfileViewController.clean()
-            guard let authViewController = UIStoryboard(name: "Main",bundle: .main
-            ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
-            authViewController.delegate = self.splashViewController
-            authViewController.modalPresentationStyle = .fullScreen
-            self.present(authViewController, animated: true, completion: nil)
-        }
-        
-        let action2 = UIAlertAction(title: "Нет", style: .default) {_ in
-            alert.dismiss(animated: true)
-        }
-        
-        alert.addAction(action1)
-        alert.addAction(action2)
+    func presentAuthViewController() {
+        guard let authViewController = UIStoryboard(name: "Main",bundle: .main
+        ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        authViewController.delegate = self.splashViewController
+        authViewController.modalPresentationStyle = .fullScreen
+        self.present(authViewController, animated: true, completion: nil)
+    }
+    
+    func showAlert(alert: UIAlertController) {
         self.present(alert, animated: true)
     }
     
-    static func clean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
+    @IBAction private func logOutButtonDidTap(_ sender: Any?) {
+        alertPresenter?.showLogOutAlert()
     }
     
     private func addProfilePhoto() {

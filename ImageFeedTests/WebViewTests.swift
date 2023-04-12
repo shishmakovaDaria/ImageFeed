@@ -93,15 +93,3 @@ final class WebViewTests: XCTestCase {
         XCTAssertEqual(code, "test code")
     }
 }
-
-
-func code(from url: URL) -> String? {
-    guard
-        let urlComponents = URLComponents(string: url.absoluteString),
-        urlComponents.path == "/oauth/authorize/native",
-        let items = urlComponents.queryItems,
-        let codeItems = items.first(where: { $0.name == "code" })
-    else { return nil }
-    
-    return codeItems.value
-}
