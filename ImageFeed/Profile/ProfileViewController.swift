@@ -7,18 +7,17 @@ public protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfilePresenterProtocol? { get set }
     func updateAvatar(url: URL)
     func updateProfileDetails(name: String, login: String, bio: String)
-    func presentAuthViewController()
+    func presentAuthViewController(authViewController: UIViewController)
     func showAlert(alert: UIAlertController)
 }
 
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     var presenter: ProfilePresenterProtocol?
+    private var alertPresenter: AlertPresenterProtocol?
     private lazy var profilePhoto = UIImageView()
     private lazy var nameLabel = UILabel()
     private lazy var nickNameLabel = UILabel()
     private lazy var statusLabel = UILabel()
-    private let splashViewController = SplashViewController()
-    private var alertPresenter: AlertPresenterProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -54,11 +53,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         statusLabel.text = bio
     }
     
-    func presentAuthViewController() {
-        guard let authViewController = UIStoryboard(name: "Main",bundle: .main
-        ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
-        authViewController.delegate = self.splashViewController
-        authViewController.modalPresentationStyle = .fullScreen
+    func presentAuthViewController(authViewController: UIViewController) {
         self.present(authViewController, animated: true, completion: nil)
     }
     
@@ -67,7 +62,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     }
     
     @IBAction private func logOutButtonDidTap(_ sender: Any?) {
-        alertPresenter?.showLogOutAlert()
+        alertPresenter?.makeLogOutAlert()
     }
     
     private func addProfilePhoto() {
