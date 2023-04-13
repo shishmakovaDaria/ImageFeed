@@ -6,7 +6,7 @@ protocol AlertPresenterProtocol {
     func makeLogOutAlert()
 }
 
-final class AlerPresenter: AlertPresenterProtocol {
+final class AlertPresenter: AlertPresenterProtocol {
     weak var viewController: ProfileViewControllerProtocol?
     private let splashViewController = SplashViewController()
     

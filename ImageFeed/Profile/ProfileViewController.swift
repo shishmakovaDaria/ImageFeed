@@ -15,9 +15,9 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     var presenter: ProfilePresenterProtocol?
     private var alertPresenter: AlertPresenterProtocol?
     private lazy var profilePhoto = UIImageView()
-    private lazy var nameLabel = UILabel()
-    private lazy var nickNameLabel = UILabel()
-    private lazy var statusLabel = UILabel()
+    lazy var nameLabel = UILabel()
+    lazy var nickNameLabel = UILabel()
+    lazy var statusLabel = UILabel()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -25,7 +25,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter = AlerPresenter(viewController: self)
+        alertPresenter = AlertPresenter(viewController: self)
         
         view.backgroundColor = .ypBlack
         addProfilePhoto()
