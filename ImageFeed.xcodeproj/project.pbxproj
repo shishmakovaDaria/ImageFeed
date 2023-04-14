@@ -26,6 +26,8 @@
 		616ED6C52995759600D1D43E /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616ED6C42995759600D1D43E /* AuthViewController.swift */; };
 		616ED6C829957D3A00D1D43E /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616ED6C729957D3A00D1D43E /* WebViewViewController.swift */; };
 		6182C738297DA66B004E679F /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6182C737297DA66B004E679F /* SingleImageViewController.swift */; };
+		618E0E3A29E9E677002CD344 /* ImagesListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E0E3929E9E677002CD344 /* ImagesListTests.swift */; };
+		618E0E3C29E9E7F3002CD344 /* ImagesListPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E0E3B29E9E7F3002CD344 /* ImagesListPresenterSpy.swift */; };
 		619BABAC29B519BE009400B1 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619BABAB29B519BE009400B1 /* UIBlockingProgressHUD.swift */; };
 		619BABAE29B65A7F009400B1 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619BABAD29B65A7F009400B1 /* ProfileService.swift */; };
 		619E136129BE633500D40D4B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 619E136029BE633500D40D4B /* Kingfisher */; };
@@ -80,6 +82,8 @@
 		616ED6C42995759600D1D43E /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		616ED6C729957D3A00D1D43E /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		6182C737297DA66B004E679F /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		618E0E3929E9E677002CD344 /* ImagesListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListTests.swift; sourceTree = "<group>"; };
+		618E0E3B29E9E7F3002CD344 /* ImagesListPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenterSpy.swift; sourceTree = "<group>"; };
 		619BABAB29B519BE009400B1 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		619BABAD29B65A7F009400B1 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		61A2033A29E4986B001EAE52 /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
@@ -207,6 +211,15 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		618E0E3829E9E616002CD344 /* ImagesList */ = {
+			isa = PBXGroup;
+			children = (
+				618E0E3929E9E677002CD344 /* ImagesListTests.swift */,
+				618E0E3B29E9E7F3002CD344 /* ImagesListPresenterSpy.swift */,
+			);
+			path = ImagesList;
+			sourceTree = "<group>";
+		};
 		61AD05DF29E87956005BF0A4 /* WebView */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +264,7 @@
 		61FBEA7729E52A8A00692DB8 /* ImageFeedTests */ = {
 			isa = PBXGroup;
 			children = (
+				618E0E3829E9E616002CD344 /* ImagesList */,
 				61AD05E029E8796C005BF0A4 /* Prolile */,
 				61AD05DF29E87956005BF0A4 /* WebView */,
 			);
@@ -407,6 +421,8 @@
 				61AD05DE29E87948005BF0A4 /* ProfileTests.swift in Sources */,
 				61E60C7629E8977700FBAE8D /* ProfileViewControllerSpy.swift in Sources */,
 				61FBEA8229E5673E00692DB8 /* WebViewViewControllerSpy.swift in Sources */,
+				618E0E3A29E9E677002CD344 /* ImagesListTests.swift in Sources */,
+				618E0E3C29E9E7F3002CD344 /* ImagesListPresenterSpy.swift in Sources */,
 				61AD05E229E87A11005BF0A4 /* ProfilePresenterSpy.swift in Sources */,
 				61FBEA8029E52CBF00692DB8 /* WebViewPresenterSpy.swift in Sources */,
 			);
