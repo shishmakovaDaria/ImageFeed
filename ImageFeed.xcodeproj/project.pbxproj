@@ -42,6 +42,7 @@
 		61C3C02429A92ADA005BCE1E /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C3C02329A92ADA005BCE1E /* CustomNavigationController.swift */; };
 		61C989A9296F29F2007EF66F /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C989A8296F29F2007EF66F /* ImagesListCell.swift */; };
 		61E60C7629E8977700FBAE8D /* ProfileViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E60C7529E8977700FBAE8D /* ProfileViewControllerSpy.swift */; };
+		61E60C7829E9A54B00FBAE8D /* ImagesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E60C7729E9A54B00FBAE8D /* ImagesListPresenter.swift */; };
 		61F2766629A3D17100E662F8 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F2766529A3D17100E662F8 /* SplashViewController.swift */; };
 		61FBEA7929E52A8A00692DB8 /* WebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FBEA7829E52A8A00692DB8 /* WebViewTests.swift */; };
 		61FBEA8029E52CBF00692DB8 /* WebViewPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FBEA7F29E52CBF00692DB8 /* WebViewPresenterSpy.swift */; };
@@ -93,6 +94,7 @@
 		61C3C02329A92ADA005BCE1E /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		61C989A8296F29F2007EF66F /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		61E60C7529E8977700FBAE8D /* ProfileViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerSpy.swift; sourceTree = "<group>"; };
+		61E60C7729E9A54B00FBAE8D /* ImagesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenter.swift; sourceTree = "<group>"; };
 		61F2766529A3D17100E662F8 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		61FBEA7629E52A8A00692DB8 /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61FBEA7829E52A8A00692DB8 /* WebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewTests.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				6132674A2954CB9400CEC80B /* ImagesListViewController.swift */,
 				61C989A8296F29F2007EF66F /* ImagesListCell.swift */,
 				61C310E829C8C7400090EBD6 /* ImagesListService.swift */,
+				61E60C7729E9A54B00FBAE8D /* ImagesListPresenter.swift */,
 			);
 			path = ImagesList;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				6125CFD229C245E800766E78 /* TabBarController.swift in Sources */,
 				61A6CA5C299023F600EE017C /* AuthConfiguration.swift in Sources */,
 				619BABAC29B519BE009400B1 /* UIBlockingProgressHUD.swift in Sources */,
+				61E60C7829E9A54B00FBAE8D /* ImagesListPresenter.swift in Sources */,
 				61A2033D29E4AFE6001EAE52 /* URLExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
