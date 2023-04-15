@@ -18,6 +18,7 @@ final class AlertPresenter: AlertPresenterProtocol {
         let alert = UIAlertController(title: "Пока, пока!",
                                       message: "Уверены, что хотите выйти?",
                                       preferredStyle: .alert)
+        alert.view.accessibilityIdentifier = "Bye bye!"
         
         let action1 = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             guard let self = self else { return }
@@ -29,6 +30,7 @@ final class AlertPresenter: AlertPresenterProtocol {
             authViewController.modalPresentationStyle = .fullScreen
             self.viewController?.presentAuthViewController(authViewController: authViewController)
         }
+        action1.accessibilityIdentifier = "Yes"
         
         let action2 = UIAlertAction(title: "Нет", style: .default) {_ in
             alert.dismiss(animated: true)

@@ -85,6 +85,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             target: self,
             action: nil)
         logOutButton.addTarget(self, action: #selector(logOutButtonDidTap(_:)), for: .touchUpInside)
+        logOutButton.accessibilityIdentifier = "logout button"
         
         logOutButton.tintColor = .ypRed
         view.addSubview(logOutButton)

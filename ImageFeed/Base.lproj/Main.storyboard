@@ -185,6 +185,7 @@
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FLz-Hq-TXt" userLabel="Back Button">
                                 <rect key="frame" x="16" y="59.999999999999993" width="9" height="15.666666666666664"/>
+                                <accessibility key="accessibilityConfiguration" identifier="nav back button white"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="8.9700000000000006" id="azS-g6-val"/>
                                     <constraint firstAttribute="height" constant="15.59" id="qhK-Ad-8rN"/>
@@ -244,6 +245,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prD-x6-SO7" userLabel="LogIn Button">
                                 <rect key="frame" x="16" y="680" width="361" height="48"/>
                                 <color key="backgroundColor" name="YP White"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Pnh-lW-FLO"/>
                                 </constraints>
