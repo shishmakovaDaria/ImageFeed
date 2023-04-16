@@ -2,7 +2,7 @@ import Foundation
 
 public protocol ImagesListPresenterProtocol: AnyObject {
     var view: ImagesListViewControllerProtocol? { get set }
-    var photos: [Photo] { get set }
+    var photos: [Photo] { get }
     
     func viewDidLoad()
     func makePhotoUrl(photoNumber: Int) -> URL?
@@ -62,11 +62,10 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
             case .success:
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(photoIsLiked: self.photos[row].isLiked)
-                self.view?.hideProgressHUD()
             case .failure(let error):
-                self.view?.hideProgressHUD()
                 print(error)
             }
+            self.view?.hideProgressHUD()
         }
     }
     

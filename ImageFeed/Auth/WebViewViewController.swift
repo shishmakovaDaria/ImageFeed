@@ -47,11 +47,6 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
         webView.load(request)
     }
     
-    private func code(from navigationAction: WKNavigationAction) -> String? {
-        guard let url = navigationAction.request.url else { return nil }
-        return presenter?.code(from: url)
-    }
-    
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
@@ -71,7 +66,7 @@ extension WebViewViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        if let code = code(from: navigationAction) {
+        if let code = presenter?.code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {

@@ -1,14 +1,15 @@
 import Foundation
+import WebKit
 
 public protocol WebViewPresenterProtocol: AnyObject {
     var view: WebViewViewControllerProtocol? { get set }
     func viewDidLoad()
     func didUpdateProgressValue(_ newValue: Double)
-    func code(from url: URL) -> String?
+    func code(from navigationAction: WKNavigationAction) -> String?
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
-    var authHelper: AuthHelperProtocol
+    private let authHelper: AuthHelperProtocol
     weak var view: WebViewViewControllerProtocol?
     
     init(authHelper: AuthHelperProtocol) {
@@ -23,8 +24,9 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         didUpdateProgressValue(0)
     }
     
-    func code(from url: URL) -> String? {
-        authHelper.code(from: url)
+    func code(from navigationAction: WKNavigationAction) -> String? {
+        guard let url = navigationAction.request.url else { return nil }
+        return authHelper.code(from: url)
     }
     
     func didUpdateProgressValue(_ newValue: Double) {
