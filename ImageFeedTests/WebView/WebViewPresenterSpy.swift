@@ -1,4 +1,5 @@
 import Foundation
+import WebKit
 import ImageFeed
 
 final class WebViewPresenterSpy: WebViewPresenterProtocol {
@@ -13,7 +14,7 @@ final class WebViewPresenterSpy: WebViewPresenterProtocol {
         
     }
     
-    func code(from url: URL) -> String? {
+    func code(from navigationAction: WKNavigationAction) -> String? {
         return nil
     }
 }

@@ -42,7 +42,7 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         imagesListCell.delegate = self
-        imagesListCell.accessibilityIdentifier = "like button"
+        imagesListCell.likeButton.accessibilityIdentifier = "like button"
         configCell(for: imagesListCell, with: indexPath)
         return imagesListCell
     }
