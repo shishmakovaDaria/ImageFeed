@@ -6,11 +6,11 @@
 - Просмотр бесконечной ленты картинок из Unsplash Editorial.
 - Просмотр краткой информации из профиля пользователя.
 
-<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/0dc46974-f4e3-452f-bd23-933a46369bea" width="175">
-<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/af5dc797-fbc1-450b-98c9-ffa9dc36e4f5" width="175">
-<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/900bb4e2-5a6c-477a-8fd4-6c443b011a2b" width="175">
-<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/5c0d3ddc-d9a5-4d27-babe-8c245a1a665d" width="175">
-<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/69fd4ee4-9b1f-4ec8-8296-b678730aff43" width="175">
+<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/0dc46974-f4e3-452f-bd23-933a46369bea" width="150">
+<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/af5dc797-fbc1-450b-98c9-ffa9dc36e4f5" width="150">
+<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/900bb4e2-5a6c-477a-8fd4-6c443b011a2b" width="150">
+<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/5c0d3ddc-d9a5-4d27-babe-8c245a1a665d" width="150">
+<img src="https://github.com/shishmakovaDaria/Tracker/assets/114743567/69fd4ee4-9b1f-4ec8-8296-b678730aff43" width="150">
 
 ## Ссылки
 
