@@ -9,6 +9,7 @@ protocol AlertPresenterProtocol {
 final class AlertPresenter: AlertPresenterProtocol {
     weak var viewController: ProfileViewControllerProtocol?
     private let splashViewController = SplashViewController()
+    private let splashPresenter = SplashPresenter()
     
     init(viewController: ProfileViewControllerProtocol) {
         self.viewController = viewController
@@ -26,6 +27,8 @@ final class AlertPresenter: AlertPresenterProtocol {
             
             guard let authViewController = UIStoryboard(name: "Main",bundle: .main
             ).instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+            splashViewController.presenter = splashPresenter
+            splashPresenter.view = splashViewController
             authViewController.delegate = self.splashViewController
             authViewController.modalPresentationStyle = .fullScreen
             self.viewController?.presentAuthViewController(authViewController: authViewController)

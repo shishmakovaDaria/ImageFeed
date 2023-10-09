@@ -12,6 +12,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     let profile = ProfileService.shared.profile
     
     func viewDidLoad() {
+        loadProfile()
         guard let avatarURL = ProfileImageService.shared.avatarURL,
               let url = URL(string: avatarURL)
         else { return }
@@ -25,7 +26,6 @@ final class ProfilePresenter: ProfilePresenterProtocol {
                 self.view?.updateAvatar(url: url)
             }
         view?.updateAvatar(url: url)
-        loadProfile()
     }
     
     static func cleanCookiesAndToken() {

@@ -5,7 +5,7 @@ protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
-final class AuthViewController: UIViewController, WebViewViewControllerDelegate {
+final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -27,8 +27,10 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
             super.prepare(for: segue, sender: sender)
         }
     }
-    
-    //MARK: - WebViewViewControllerDelegate
+}
+
+//MARK: - WebViewViewControllerDelegate
+extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         delegate?.authViewController(self, didAuthenticateWithCode: code)
         dismiss(animated: true)
@@ -38,4 +40,3 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
         dismiss(animated: true, completion: nil)
     }
 }
-    

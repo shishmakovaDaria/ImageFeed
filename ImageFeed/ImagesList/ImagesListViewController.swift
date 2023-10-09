@@ -8,54 +8,6 @@ public protocol ImagesListViewControllerProtocol: AnyObject {
     func hideProgressHUD()
 }
 
-extension ImagesListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let imageSize = presenter?.photos[indexPath.row].size else { return CGFloat() }
-        
-        let imageViewWeidth = tableView.bounds.width - 32
-        let imageWidth = imageSize.width
-        let scale = imageViewWeidth / imageWidth
-        let imageViewHeight = imageSize.height * scale
-        
-        return imageViewHeight + 8
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        presenter?.loadNextPhotos(row: indexPath.row)
-    }
-}
-
-extension ImagesListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let presenter = presenter else { return 0 }
-        return presenter.photos.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        
-        guard let imagesListCell = cell as? ImagesListCell else {
-            return UITableViewCell()
-        }
-        imagesListCell.delegate = self
-        imagesListCell.likeButton.accessibilityIdentifier = "like button"
-        configCell(for: imagesListCell, with: indexPath)
-        return imagesListCell
-    }
-}
-
-extension ImagesListViewController: ImagesListCellDelegate {
-    func imageListCellDidTapLike(_ cell: ImagesListCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        UIBlockingProgressHUD.show()
-        presenter?.changeLike(cell: cell, row: indexPath.row)
-    }
-}
-
 final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     var presenter: ImagesListPresenterProtocol?
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
@@ -121,3 +73,53 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     }
 }
 
+//MARK: - UITableViewDelegate
+extension ImagesListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let imageSize = presenter?.photos[indexPath.row].size else { return CGFloat() }
+        
+        let imageViewWeidth = tableView.bounds.width - 32
+        let imageWidth = imageSize.width
+        let scale = imageViewWeidth / imageWidth
+        let imageViewHeight = imageSize.height * scale
+        
+        return imageViewHeight + 8
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        presenter?.loadNextPhotos(row: indexPath.row)
+    }
+}
+
+//MARK: - UITableViewDataSource
+extension ImagesListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let presenter = presenter else { return 0 }
+        return presenter.photos.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
+        
+        guard let imagesListCell = cell as? ImagesListCell else {
+            return UITableViewCell()
+        }
+        imagesListCell.delegate = self
+        imagesListCell.likeButton.accessibilityIdentifier = "like button"
+        configCell(for: imagesListCell, with: indexPath)
+        return imagesListCell
+    }
+}
+
+//MARK: - ImagesListCellDelegate
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        UIBlockingProgressHUD.show()
+        presenter?.changeLike(cell: cell, row: indexPath.row)
+    }
+}
