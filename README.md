@@ -36,7 +36,7 @@
 - ProgressHUD
 - WebKit
 - SwiftKeychainWrapper
-- AutoLayout programmaticaly
+- AutoLayout programmatically
 - REST API
 - XCTest
 
